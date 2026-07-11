@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kawr Business Beta 1.0</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+
+<h1>Kawr Business</h1>
+
+<p>Beta 1.0</p>
+
+</div>
+
+<nav>
+
+<a href="#inicio">Início</a>
+
+<a href="#dashboard">Dashboard</a>
+
+<a href="#quemSomos">Quem Somos</a>
+
+<a href="#solucoes">Soluções</a>
+
+<a href="#atualizacoes">Atualizações</a>
+
+<a href="#aviso">Aviso</a>
+
+</nav>
+
+</header>
+
+<section id="inicio" class="hero">
+
+<h1>Gestão Financeira Inteligente</h1>
+
+<p>
+
+Transformando números em decisões.
+
+</p>
+
+<button>
+
+Conhecer o Sistema
+
+</button>
+
+</section>
+
+<section id="dashboard">
+
+<h2>
+
+Dashboard
+
+</h2>
+
+<div class="container">
+
+<div class="empresario">
+
+<h2>
+
+Empresário
+
+</h2>
+
+<div class="card">
+
+<h3>Score Financeiro</h3>
+
+<div id="score">
+
+90
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Receita</h3>
+
+<p id="receita">
+
+R$ 0,00
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Despesas</h3>
+
+<p id="despesas">
+
+R$ 0,00
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Lucro</h3>
+
+<p id="lucro">
+
+R$ 0,00
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Alertas</h3>
+
+<div id="alertas"></div>
+
+</div>
+
+<canvas id="graficoReceita"></canvas>
+
+<canvas id="graficoDespesa"></canvas>
+
+</div>
+
+<div class="contador">
+
+<h2>
+
+Contador
+
+</h2>
+
+<div class="card">
+
+<label>
+
+CNAE
+
+</label>
+
+<input type="text" id="cnae">
+
+</div>
+
+<div class="card">
+
+<label>
+
+Regime Tributário
+
+</label>
+
+<select id="regime">
+
+<option>Simples Nacional</option>
+
+<option>Lucro Presumido</option>
+
+<option>Lucro Real</option>
+
+</select>
+
+</div>
+
+<div class="card">
+
+<label>
+
+Receita Bruta
+
+</label>
+
+<input type="number" id="receitaBruta">
+
+</div>
+
+<div class="card">
+
+<label>
+
+Folha de Pagamento
+
+</label>
+
+<input type="number" id="folha">
+
+</div>
+
+<div class="card">
+
+<h3>
+
+Resultado Tributário
+
+</h3>
+
+<p id="anexo"></p>
+
+<p id="aliquota"></p>
+
+<p id="fatorR"></p>
+
+<p id="das"></p>
+
+</div>
+
+<button id="btnCalculos">
+
+Ver Cálculos
+
+</button>
+
+<div id="memoriaCalculo">
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="quemSomos">
+
+<h2>
+
+Quem Somos
+
+</h2>
+
+<p>
+
+Somos uma startup que auxilia empresários e contadores na organização financeira e tributária.
+
+</p>
+
+</section>
+
+<section id="solucoes">
+
+<h2>
+
+O que resolvemos
+
+</h2>
+
+<ul>
+
+<li>Organização Financeira</li>
+
+<li>Cálculo Tributário</li>
+
+<li>Score Financeiro</li>
+
+<li>Memória de Cálculo</li>
+
+<li>Indicadores Inteligentes</li>
+
+</ul>
+
+</section>
+
+<section id="atualizacoes">
+
+<h2>
+
+Próximas Atualizações
+
+</h2>
+
+<ul>
+
+<li>Exportação em PDF</li>
+
+<li>Login</li>
+
+<li>Banco de Dados</li>
+
+<li>IA</li>
+
+<li>Melhores Gráficos</li>
+
+<li>Aplicativo</li>
+
+</ul>
+
+</section>
+
+<section id="aviso">
+
+<h2>
+
+Aviso
+
+</h2>
+
+<p>
+
+O Kawr Business é uma ferramenta de apoio para empresas e profissionais da contabilidade.
+
+Não substitui o contador nem fornece garantia de conformidade fiscal. As decisões tributárias devem ser analisadas por um profissional habilitado.
+
+</p>
+
+</section>
+
+<footer>
+
+<p>
+
+© 2026 Kawr Business Beta 1.0
+
+</p>
+
+</footer>
+
+<script src="js/script.js"></script>
+
+<script src="js/impostos.js"></script>
+
+<script src="js/score.js"></script>
+
+</body>
+
+  </html>
