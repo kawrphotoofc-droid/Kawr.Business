@@ -5,11 +5,10 @@
 
 /**
  * Gera alertas baseado em dados financeiros
- * @param {string} usuarioId - ID do usuário
  * @param {string} mes - Mês (YYYY-MM)
  * @param {object} financeiro - Dados financeiros
  */
-async function gerarAlertas(usuarioId, mes, financeiro) {
+async function gerarAlertas(mes, financeiro) {
     const alertas = [];
 
     // ===== ALERTA 1: FLUXO DE CAIXA NEGATIVO =====
@@ -25,7 +24,7 @@ async function gerarAlertas(usuarioId, mes, financeiro) {
     }
 
     // ===== ALERTA 2: DESPESAS MUITO ALTAS =====
-    const percentualDespesas = (financeiro.despesasTotal / financeiro.receitaBruta) * 100;
+    const percentualDespesas = (financeiro.despesasTotal / (financeiro.receitaBruta || 1)) * 100;
     if (percentualDespesas > 85) {
         alertas.push({
             tipo: 'DESPESAS_ALTAS',
@@ -40,7 +39,7 @@ async function gerarAlertas(usuarioId, mes, financeiro) {
     // ===== ALERTA 3: RECEITA EM QUEDA =====
     try {
         const mesAnterior = obterMesAnterior(mes);
-        const financeirAnterior = await DB.obterFinanceiro(usuarioId, mesAnterior);
+        const financeirAnterior = await DB.obterFinanceiro(mesAnterior);
         
         if (financeirAnterior) {
             const variacaoReceita = calcularVariacao(financeiro.receitaBruta, financeirAnterior.receitaBruta);
@@ -51,7 +50,7 @@ async function gerarAlertas(usuarioId, mes, financeiro) {
                     mensagem: `Sua receita caiu ${Math.abs(variacaoReceita).toFixed(1)}% em relação ao mês anterior. Investigue as causas dessa queda e revise suas estratégias comerciais.`,
                     icone: 'fa-chart-line',
                     cor: 'warning',
-                    acao: 'Analisar Tendência'
+                    acao: 'Analisar Despesas'
                 });
             }
         }
@@ -60,7 +59,7 @@ async function gerarAlertas(usuarioId, mes, financeiro) {
     }
 
     // ===== ALERTA 4: POSSÍVEL DESENQUADRAMENTO MEI =====
-    const empresa = await DB.obterEmpresa(usuarioId);
+    const empresa = await DB.obterEmpresa();
     if (empresa && empresa.tipo === 'MEI' && financeiro.receitaBruta > KAWR.LIMITE_MEI) {
         alertas.push({
             tipo: 'DESENQUADRAMENTO_MEI',
@@ -73,7 +72,7 @@ async function gerarAlertas(usuarioId, mes, financeiro) {
     }
 
     // ===== ALERTA 5: IMPOSTOS QUE MERECEM REVISÃO =====
-    const cargaTributaria = (financeiro.impostos / financeiro.receitaBruta) * 100;
+    const cargaTributaria = (financeiro.impostos / (financeiro.receitaBruta || 1)) * 100;
     if (cargaTributaria > 15) {
         alertas.push({
             tipo: 'IMPOSTOS_REVISAO',
@@ -98,7 +97,7 @@ async function gerarAlertas(usuarioId, mes, financeiro) {
     }
 
     // Salvar alertas no banco de dados
-    await DB.salvarAlertas(usuarioId, mes, alertas);
+    await DB.salvarAlertas(mes, alertas);
 
     // Atualizar interface
     atualizarAlertas(alertas);
@@ -150,9 +149,6 @@ function executarAcao(acao) {
         case 'Analisar Despesas':
             document.querySelector('[data-section="graficos"]').click();
             break;
-        case 'Analisar Tendência':
-            document.querySelector('[data-section="historico"]').click();
-            break;
         case 'Consultar Contador':
             alert('Entre em contato com seu contador para mais informações.');
             break;
@@ -167,12 +163,11 @@ function executarAcao(acao) {
 
 /**
  * Carrega alertas do mês
- * @param {string} usuarioId - ID do usuário
  * @param {string} mes - Mês (YYYY-MM)
  */
-async function carregarAlertas(usuarioId, mes) {
+async function carregarAlertas(mes) {
     try {
-        const alertas = await DB.obterAlertas(usuarioId, mes);
+        const alertas = await DB.obterAlertas(mes);
         atualizarAlertas(alertas);
     } catch (erro) {
         console.error("Erro ao carregar alertas:", erro);

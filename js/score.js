@@ -33,7 +33,7 @@ function calcularScoreInteligente(financeiro, anterior = null) {
             impacto: "+20",
             cor: "success"
         });
-    } else if (financeiro.fluxoCaixa > -financeiro.receita * 0.1) {
+    } else if (financeiro.fluxoCaixa > -financeiro.receitaBruta * 0.1) {
         score.fluxoCaixa = 10;
         score.fatoresInfluentes.push({
             fator: "Fluxo de Caixa Levemente Negativo",
@@ -148,7 +148,7 @@ function calcularScoreInteligente(financeiro, anterior = null) {
     }
 
     // ===== FATOR 5: LIQUIDEZ (10 pontos) =====
-    const razaoLiquidez = financeiro.fluxoCaixa / financeiro.despesasTotal;
+    const razaoLiquidez = financeiro.fluxoCaixa / (financeiro.despesasTotal || 1);
     if (razaoLiquidez > 0.5) {
         score.liquidez = 10;
         score.fatoresInfluentes.push({
@@ -173,7 +173,7 @@ function calcularScoreInteligente(financeiro, anterior = null) {
     }
 
     // ===== FATOR 6: CARGA TRIBUTÁRIA (10 pontos) =====
-    const cargaTributaria = (financeiro.impostos / financeiro.receitaBruta) * 100;
+    const cargaTributaria = (financeiro.impostos / (financeiro.receitaBruta || 1)) * 100;
     if (cargaTributaria <= 10) {
         score.impostos = 10;
         score.fatoresInfluentes.push({
@@ -337,21 +337,20 @@ function atualizarScoreDashboard(score) {
 
 /**
  * Calcula e atualiza score
- * @param {string} usuarioId - ID do usuário
  * @param {string} mes - Mês (YYYY-MM)
  * @param {object} financeiro - Dados financeiros
  */
-async function calcularEAtualizarScore(usuarioId, mes, financeiro) {
+async function calcularEAtualizarScore(mes, financeiro) {
     try {
         // Obter dados do mês anterior
         const mesAnterior = obterMesAnterior(mes);
-        const financeirAnterior = await DB.obterFinanceiro(usuarioId, mesAnterior);
+        const financeirAnterior = await DB.obterFinanceiro(mesAnterior);
 
         // Calcular score
         const score = calcularScoreInteligente(financeiro, financeirAnterior);
 
         // Salvar no banco de dados
-        await DB.salvarScore(usuarioId, mes, score);
+        await DB.salvarScore(mes, score);
 
         // Atualizar dashboard
         atualizarScoreDashboard(score);
@@ -363,12 +362,11 @@ async function calcularEAtualizarScore(usuarioId, mes, financeiro) {
 
 /**
  * Carrega e exibe score do mês
- * @param {string} usuarioId - ID do usuário
  * @param {string} mes - Mês (YYYY-MM)
  */
-async function carregarScore(usuarioId, mes) {
+async function carregarScore(mes) {
     try {
-        const score = await DB.obterScore(usuarioId, mes);
+        const score = await DB.obterScore(mes);
         if (score) {
             atualizarScoreDashboard(score);
         }

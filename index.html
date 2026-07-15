@@ -38,10 +38,7 @@
                 <i class="fas fa-file-pdf"></i>
                 <span>Relatórios</span>
             </a>
-            <a href="#historico" class="nav-item" data-section="historico">
-                <i class="fas fa-calendar"></i>
-                <span>Histórico</span>
-            </a>
+
             <a href="#alertas" class="nav-item" data-section="alertas">
                 <i class="fas fa-exclamation-triangle"></i>
                 <span>Alertas</span>
@@ -52,12 +49,7 @@
             </a>
         </nav>
 
-        <div class="sidebar-footer">
-            <button class="btn-logout" id="btnLogout">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Sair</span>
-            </button>
-        </div>
+
     </aside>
 
     <!-- MAIN CONTENT -->
@@ -313,49 +305,7 @@
             </div>
         </section>
 
-        <!-- HISTÓRICO SECTION -->
-        <section id="historico" class="section">
-            <div class="section-header">
-                <h1>Histórico</h1>
-                <p>Acompanhe a evolução mensal da sua empresa</p>
-            </div>
 
-            <div class="historico-container">
-                <div class="historico-nav">
-                    <button class="btn-nav" id="btnMesAnterior">← Mês Anterior</button>
-                    <span id="mesSelecionado">Julho 2026</span>
-                    <button class="btn-nav" id="btnProxMes">Próximo Mês →</button>
-                </div>
-
-                <div class="historico-cards">
-                    <div class="historico-card">
-                        <label>Receita</label>
-                        <p id="histReceita">R$ 0,00</p>
-                        <span id="histReceitaComp" class="comparison">-</span>
-                    </div>
-                    <div class="historico-card">
-                        <label>Lucro</label>
-                        <p id="histLucro">R$ 0,00</p>
-                        <span id="histLucroComp" class="comparison">-</span>
-                    </div>
-                    <div class="historico-card">
-                        <label>Despesas</label>
-                        <p id="histDespesas">R$ 0,00</p>
-                        <span id="histDespesasComp" class="comparison">-</span>
-                    </div>
-                    <div class="historico-card">
-                        <label>Fluxo de Caixa</label>
-                        <p id="histFluxo">R$ 0,00</p>
-                        <span id="histFluxoComp" class="comparison">-</span>
-                    </div>
-                    <div class="historico-card">
-                        <label>Score</label>
-                        <p id="histScore">0</p>
-                        <span id="histScoreComp" class="comparison">-</span>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- ALERTAS SECTION -->
         <section id="alertas" class="section">
@@ -414,64 +364,11 @@
         </section>
     </main>
 
-    <!-- MODAL: LOGIN -->
-    <div class="modal" id="modalLogin">
-        <div class="modal-content">
-            <h2>Kawr Business v2.0</h2>
-            <p>Gestão Financeira Inteligente</p>
-            
-            <div class="login-tabs">
-                <button class="tab-btn active" id="tabLogin">Login</button>
-                <button class="tab-btn" id="tabCadastro">Cadastro</button>
-            </div>
 
-            <!-- TAB: LOGIN -->
-            <div class="tab-content active" id="tabLoginContent">
-                <form id="formLogin">
-                    <div class="form-field">
-                        <label>Email</label>
-                        <input type="email" id="loginEmail" placeholder="seu@email.com" required>
-                    </div>
-                    <div class="form-field">
-                        <label>Senha</label>
-                        <input type="password" id="loginSenha" placeholder="••••••••" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Entrar</button>
-                    <p class="form-link">
-                        <a href="#" id="linkRecuperarSenha">Esqueceu a senha?</a>
-                    </p>
-                </form>
-            </div>
-
-            <!-- TAB: CADASTRO -->
-            <div class="tab-content" id="tabCadastroContent">
-                <form id="formCadastro">
-                    <div class="form-field">
-                        <label>Nome</label>
-                        <input type="text" id="cadastroNome" placeholder="Seu nome" required>
-                    </div>
-                    <div class="form-field">
-                        <label>Email</label>
-                        <input type="email" id="cadastroEmail" placeholder="seu@email.com" required>
-                    </div>
-                    <div class="form-field">
-                        <label>Senha</label>
-                        <input type="password" id="cadastroSenha" placeholder="••••••••" required>
-                    </div>
-                    <div class="form-field">
-                        <label>Confirmar Senha</label>
-                        <input type="password" id="cadastroConfirm" placeholder="••••••••" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Criar Conta</button>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <!-- SCRIPTS -->
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
-    <script src="js/auth.js"></script>
     <script src="js/database.js"></script>
     <script src="js/score.js"></script>
     <script src="js/charts.js"></script>

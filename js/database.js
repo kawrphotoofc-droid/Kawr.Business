@@ -3,6 +3,9 @@
    database.js - Banco de Dados (Firestore Simulado)
 ========================================== */
 
+// ===== CONSTANTE DE USUÁRIO PADRÃO =====
+const DEFAULT_USER_ID = 'default_user';
+
 // ===== BANCO DE DADOS LOCAL =====
 const DB = {
     empresas: recuperarLocal('kawr_empresas') || {},
@@ -12,18 +15,13 @@ const DB = {
 
     /**
      * Salva dados da empresa
-     * @param {string} usuarioId - ID do usuário
      * @param {object} dados - Dados da empresa
      * @returns {Promise} Resultado da operação
      */
-    salvarEmpresa: async function(usuarioId, dados) {
+    salvarEmpresa: async function(dados) {
         return new Promise((resolve) => {
-            if (!this.empresas[usuarioId]) {
-                this.empresas[usuarioId] = {};
-            }
-
-            this.empresas[usuarioId] = {
-                ...this.empresas[usuarioId],
+            this.empresas[DEFAULT_USER_ID] = {
+                ...this.empresas[DEFAULT_USER_ID],
                 ...dados,
                 atualizadoEm: new Date().toISOString()
             };
@@ -33,38 +31,36 @@ const DB = {
             resolve({
                 sucesso: true,
                 mensagem: "Dados da empresa salvos com sucesso",
-                dados: this.empresas[usuarioId]
+                dados: this.empresas[DEFAULT_USER_ID]
             });
         });
     },
 
     /**
      * Obtém dados da empresa
-     * @param {string} usuarioId - ID do usuário
      * @returns {Promise} Dados da empresa
      */
-    obterEmpresa: async function(usuarioId) {
+    obterEmpresa: async function() {
         return new Promise((resolve) => {
-            const empresa = this.empresas[usuarioId] || null;
+            const empresa = this.empresas[DEFAULT_USER_ID] || null;
             resolve(empresa);
         });
     },
 
     /**
      * Salva dados financeiros
-     * @param {string} usuarioId - ID do usuário
      * @param {string} mes - Mês (YYYY-MM)
      * @param {object} dados - Dados financeiros
      * @returns {Promise} Resultado da operação
      */
-    salvarFinanceiro: async function(usuarioId, mes, dados) {
+    salvarFinanceiro: async function(mes, dados) {
         return new Promise((resolve) => {
-            if (!this.financeiro[usuarioId]) {
-                this.financeiro[usuarioId] = {};
+            if (!this.financeiro[DEFAULT_USER_ID]) {
+                this.financeiro[DEFAULT_USER_ID] = {};
             }
 
-            this.financeiro[usuarioId][mes] = {
-                ...this.financeiro[usuarioId][mes],
+            this.financeiro[DEFAULT_USER_ID][mes] = {
+                ...this.financeiro[DEFAULT_USER_ID][mes],
                 ...dados,
                 mes: mes,
                 atualizadoEm: new Date().toISOString()
@@ -75,51 +71,48 @@ const DB = {
             resolve({
                 sucesso: true,
                 mensagem: "Dados financeiros salvos com sucesso",
-                dados: this.financeiro[usuarioId][mes]
+                dados: this.financeiro[DEFAULT_USER_ID][mes]
             });
         });
     },
 
     /**
      * Obtém dados financeiros de um mês
-     * @param {string} usuarioId - ID do usuário
      * @param {string} mes - Mês (YYYY-MM)
      * @returns {Promise} Dados financeiros
      */
-    obterFinanceiro: async function(usuarioId, mes) {
+    obterFinanceiro: async function(mes) {
         return new Promise((resolve) => {
-            const dados = this.financeiro[usuarioId]?.[mes] || null;
+            const dados = this.financeiro[DEFAULT_USER_ID]?.[mes] || null;
             resolve(dados);
         });
     },
 
     /**
-     * Obtém histórico financeiro
-     * @param {string} usuarioId - ID do usuário
+     * Obtém histórico financeiro (todos os meses)
      * @returns {Promise} Histórico completo
      */
-    obterHistorico: async function(usuarioId) {
+    obterHistorico: async function() {
         return new Promise((resolve) => {
-            const historico = this.financeiro[usuarioId] || {};
+            const historico = this.financeiro[DEFAULT_USER_ID] || {};
             resolve(historico);
         });
     },
 
     /**
      * Salva score da empresa
-     * @param {string} usuarioId - ID do usuário
      * @param {string} mes - Mês (YYYY-MM)
      * @param {object} dados - Dados do score
      * @returns {Promise} Resultado da operação
      */
-    salvarScore: async function(usuarioId, mes, dados) {
+    salvarScore: async function(mes, dados) {
         return new Promise((resolve) => {
-            if (!this.scores[usuarioId]) {
-                this.scores[usuarioId] = {};
+            if (!this.scores[DEFAULT_USER_ID]) {
+                this.scores[DEFAULT_USER_ID] = {};
             }
 
-            this.scores[usuarioId][mes] = {
-                ...this.scores[usuarioId][mes],
+            this.scores[DEFAULT_USER_ID][mes] = {
+                ...this.scores[DEFAULT_USER_ID][mes],
                 ...dados,
                 mes: mes,
                 atualizadoEm: new Date().toISOString()
@@ -130,38 +123,36 @@ const DB = {
             resolve({
                 sucesso: true,
                 mensagem: "Score salvo com sucesso",
-                dados: this.scores[usuarioId][mes]
+                dados: this.scores[DEFAULT_USER_ID][mes]
             });
         });
     },
 
     /**
      * Obtém score de um mês
-     * @param {string} usuarioId - ID do usuário
      * @param {string} mes - Mês (YYYY-MM)
      * @returns {Promise} Dados do score
      */
-    obterScore: async function(usuarioId, mes) {
+    obterScore: async function(mes) {
         return new Promise((resolve) => {
-            const score = this.scores[usuarioId]?.[mes] || null;
+            const score = this.scores[DEFAULT_USER_ID]?.[mes] || null;
             resolve(score);
         });
     },
 
     /**
      * Salva alertas
-     * @param {string} usuarioId - ID do usuário
      * @param {string} mes - Mês (YYYY-MM)
      * @param {array} alertas - Lista de alertas
      * @returns {Promise} Resultado da operação
      */
-    salvarAlertas: async function(usuarioId, mes, alertas) {
+    salvarAlertas: async function(mes, alertas) {
         return new Promise((resolve) => {
-            if (!this.alertas[usuarioId]) {
-                this.alertas[usuarioId] = {};
+            if (!this.alertas[DEFAULT_USER_ID]) {
+                this.alertas[DEFAULT_USER_ID] = {};
             }
 
-            this.alertas[usuarioId][mes] = {
+            this.alertas[DEFAULT_USER_ID][mes] = {
                 alertas: alertas,
                 atualizadoEm: new Date().toISOString()
             };
@@ -171,35 +162,33 @@ const DB = {
             resolve({
                 sucesso: true,
                 mensagem: "Alertas salvos com sucesso",
-                dados: this.alertas[usuarioId][mes]
+                dados: this.alertas[DEFAULT_USER_ID][mes]
             });
         });
     },
 
     /**
      * Obtém alertas de um mês
-     * @param {string} usuarioId - ID do usuário
      * @param {string} mes - Mês (YYYY-MM)
      * @returns {Promise} Lista de alertas
      */
-    obterAlertas: async function(usuarioId, mes) {
+    obterAlertas: async function(mes) {
         return new Promise((resolve) => {
-            const dados = this.alertas[usuarioId]?.[mes] || { alertas: [] };
+            const dados = this.alertas[DEFAULT_USER_ID]?.[mes] || { alertas: [] };
             resolve(dados.alertas);
         });
     },
 
     /**
-     * Limpa todos os dados do usuário
-     * @param {string} usuarioId - ID do usuário
+     * Limpa todos os dados
      * @returns {Promise} Resultado da operação
      */
-    limparDados: async function(usuarioId) {
+    limparDados: async function() {
         return new Promise((resolve) => {
-            delete this.empresas[usuarioId];
-            delete this.financeiro[usuarioId];
-            delete this.scores[usuarioId];
-            delete this.alertas[usuarioId];
+            delete this.empresas[DEFAULT_USER_ID];
+            delete this.financeiro[DEFAULT_USER_ID];
+            delete this.scores[DEFAULT_USER_ID];
+            delete this.alertas[DEFAULT_USER_ID];
 
             salvarLocal('kawr_empresas', this.empresas);
             salvarLocal('kawr_financeiro', this.financeiro);
@@ -220,10 +209,7 @@ const DB = {
  * Carrega dados da empresa no formulário
  */
 async function carregarDadosEmpresa() {
-    const usuario = AUTH.obterUsuarioAtual();
-    if (!usuario) return;
-
-    const empresa = await DB.obterEmpresa(usuario.id);
+    const empresa = await DB.obterEmpresa();
     
     if (empresa) {
         document.getElementById('inputEmpresa').value = empresa.nome || '';
@@ -242,11 +228,8 @@ async function carregarDadosEmpresa() {
  * Carrega dados financeiros do mês atual
  */
 async function carregarFinanceiro() {
-    const usuario = AUTH.obterUsuarioAtual();
-    if (!usuario) return;
-
     const mes = obterMesAtual();
-    const financeiro = await DB.obterFinanceiro(usuario.id, mes);
+    const financeiro = await DB.obterFinanceiro(mes);
 
     if (financeiro) {
         document.getElementById('inputReceitaBruta').value = financeiro.receitaBruta || 0;
@@ -260,9 +243,6 @@ async function carregarFinanceiro() {
  * Salva dados da empresa
  */
 async function salvarDadosEmpresa() {
-    const usuario = AUTH.obterUsuarioAtual();
-    if (!usuario) return;
-
     const empresa = {
         nome: document.getElementById('inputEmpresa').value.trim(),
         cnpj: document.getElementById('inputCNPJ').value.trim(),
@@ -276,8 +256,7 @@ async function salvarDadosEmpresa() {
     }
 
     try {
-        await DB.salvarEmpresa(usuario.id, empresa);
-        await AUTH.atualizarUsuario(usuario.email, { empresa: empresa });
+        await DB.salvarEmpresa(empresa);
         notificarSucesso("Dados da empresa salvos com sucesso");
         await carregarDadosEmpresa();
     } catch (erro) {
@@ -289,9 +268,6 @@ async function salvarDadosEmpresa() {
  * Salva dados financeiros
  */
 async function salvarDadosFinanceiro() {
-    const usuario = AUTH.obterUsuarioAtual();
-    if (!usuario) return;
-
     const mes = document.getElementById('inputPeriodo').value || obterMesAtual();
     const receitaBruta = Number(document.getElementById('inputReceitaBruta').value) || 0;
     const despesasTotal = Number(document.getElementById('inputDespesasTotal').value) || 0;
@@ -324,17 +300,17 @@ async function salvarDadosFinanceiro() {
     };
 
     try {
-        await DB.salvarFinanceiro(usuario.id, mes, financeiro);
+        await DB.salvarFinanceiro(mes, financeiro);
         notificarSucesso("Dados financeiros salvos com sucesso");
         
         // Atualizar dashboard
         atualizarDashboard(financeiro);
         
         // Calcular score
-        await calcularEAtualizarScore(usuario.id, mes, financeiro);
+        await calcularEAtualizarScore(mes, financeiro);
         
         // Gerar alertas
-        await gerarAlertas(usuario.id, mes, financeiro);
+        await gerarAlertas(mes, financeiro);
         
     } catch (erro) {
         notificarErro(erro.message);
@@ -350,12 +326,9 @@ document.getElementById('btnSalvarDados')?.addEventListener('click', async funct
 
 document.getElementById('btnLimparDados')?.addEventListener('click', async function() {
     if (confirm("Tem certeza? Todos os dados serão removidos permanentemente.")) {
-        const usuario = AUTH.obterUsuarioAtual();
-        if (usuario) {
-            await DB.limparDados(usuario.id);
-            notificarSucesso("Todos os dados foram removidos");
-            location.reload();
-        }
+        await DB.limparDados();
+        notificarSucesso("Todos os dados foram removidos");
+        location.reload();
     }
 });
 

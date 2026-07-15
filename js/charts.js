@@ -352,13 +352,12 @@ function criarGraficoScore(scores) {
 
 /**
  * Atualiza todos os gráficos
- * @param {string} usuarioId - ID do usuário
  */
-async function atualizarGraficos(usuarioId) {
+async function atualizarGraficos() {
     try {
-        const historico = await DB.obterHistorico(usuarioId);
-        const scores = await DB.obterScore(usuarioId, obterMesAtual()) ? 
-            { [obterMesAtual()]: await DB.obterScore(usuarioId, obterMesAtual()) } : {};
+        const historico = await DB.obterHistorico();
+        const scores = await DB.obterScore(obterMesAtual()) ? 
+            { [obterMesAtual()]: await DB.obterScore(obterMesAtual()) } : {};
 
         if (Object.keys(historico).length > 0) {
             const ultimoMes = Object.keys(historico).sort().pop();

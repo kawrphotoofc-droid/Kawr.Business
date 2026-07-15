@@ -9,19 +9,16 @@ let mesSelecionado = obterMesAtual();
 // ===== INICIALIZAÇÃO =====
 
 /**
- * Inicializa o dashboard com dados do usuário
+ * Inicializa o dashboard com dados
  */
 async function inicializarDashboard() {
-    const usuario = AUTH.obterUsuarioAtual();
-    if (!usuario) return;
-
     try {
         // Carregar dados
         await carregarDadosEmpresa();
         await carregarFinanceiro();
-        await carregarScore(usuario.id, mesSelecionado);
-        await carregarAlertas(usuario.id, mesSelecionado);
-        await atualizarGraficos(usuario.id);
+        await carregarScore(mesSelecionado);
+        await carregarAlertas(mesSelecionado);
+        await atualizarGraficos();
         await atualizarDashboard();
 
         // Atualizar data
@@ -37,13 +34,10 @@ async function inicializarDashboard() {
  * @param {object} financeiro - Dados financeiros (opcional)
  */
 async function atualizarDashboard(financeiro = null) {
-    const usuario = AUTH.obterUsuarioAtual();
-    if (!usuario) return;
-
     try {
         // Se não houver dados financeiros, carregar do banco
         if (!financeiro) {
-            financeiro = await DB.obterFinanceiro(usuario.id, mesSelecionado);
+            financeiro = await DB.obterFinanceiro(mesSelecionado);
         }
 
         if (!financeiro) {
@@ -69,60 +63,8 @@ async function atualizarDashboard(financeiro = null) {
         document.getElementById('compDespesas').innerHTML = '<span class="badge-down">↓ -2%</span> vs. mês anterior';
         document.getElementById('compFluxo').innerHTML = '<span class="badge-up">↑ Saudável</span>';
 
-        // Atualizar histórico
-        await atualizarHistorico(usuario.id, mesSelecionado);
-
     } catch (erro) {
         console.error("Erro ao atualizar dashboard:", erro);
-    }
-}
-
-/**
- * Atualiza a seção de histórico
- * @param {string} usuarioId - ID do usuário
- * @param {string} mes - Mês (YYYY-MM)
- */
-async function atualizarHistorico(usuarioId, mes) {
-    try {
-        const financeiro = await DB.obterFinanceiro(usuarioId, mes);
-        const mesAnterior = obterMesAnterior(mes);
-        const financeirAnterior = await DB.obterFinanceiro(usuarioId, mesAnterior);
-
-        if (financeiro) {
-            document.getElementById('histReceita').textContent = formatarMoeda(financeiro.receitaBruta);
-            document.getElementById('histLucro').textContent = formatarMoeda(financeiro.lucroLiquido);
-            document.getElementById('histDespesas').textContent = formatarMoeda(financeiro.despesasTotal);
-            document.getElementById('histFluxo').textContent = formatarMoeda(financeiro.fluxoCaixa);
-
-            // Calcular variações
-            if (financeirAnterior) {
-                const varReceita = calcularVariacao(financeiro.receitaBruta, financeirAnterior.receitaBruta);
-                const varLucro = calcularVariacao(financeiro.lucroLiquido, financeirAnterior.lucroLiquido);
-                const varDespesas = calcularVariacao(financeiro.despesasTotal, financeirAnterior.despesasTotal);
-                const varFluxo = calcularVariacao(financeiro.fluxoCaixa, financeirAnterior.fluxoCaixa);
-
-                document.getElementById('histReceitaComp').textContent = 
-                    (varReceita > 0 ? '↑' : '↓') + ' ' + Math.abs(varReceita).toFixed(1) + '%';
-                document.getElementById('histLucroComp').textContent = 
-                    (varLucro > 0 ? '↑' : '↓') + ' ' + Math.abs(varLucro).toFixed(1) + '%';
-                document.getElementById('histDespesasComp').textContent = 
-                    (varDespesas > 0 ? '↑' : '↓') + ' ' + Math.abs(varDespesas).toFixed(1) + '%';
-                document.getElementById('histFluxoComp').textContent = 
-                    (varFluxo > 0 ? '↑' : '↓') + ' ' + Math.abs(varFluxo).toFixed(1) + '%';
-            }
-
-            // Score
-            const score = await DB.obterScore(usuarioId, mes);
-            if (score) {
-                document.getElementById('histScore').textContent = Math.round(score.valor);
-            }
-        }
-
-        // Atualizar seletor de mês
-        document.getElementById('mesSelecionado').textContent = formatarMes(mes + '-01');
-
-    } catch (erro) {
-        console.error("Erro ao atualizar histórico:", erro);
     }
 }
 
@@ -190,29 +132,6 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Histórico - Navegação de Meses
-document.getElementById('btnMesAnterior')?.addEventListener('click', async function() {
-    mesSelecionado = obterMesAnterior(mesSelecionado);
-    const usuario = AUTH.obterUsuarioAtual();
-    if (usuario) {
-        await atualizarHistorico(usuario.id, mesSelecionado);
-        await atualizarDashboard();
-        await carregarScore(usuario.id, mesSelecionado);
-        await carregarAlertas(usuario.id, mesSelecionado);
-    }
-});
-
-document.getElementById('btnProxMes')?.addEventListener('click', async function() {
-    mesSelecionado = obterProxMes(mesSelecionado);
-    const usuario = AUTH.obterUsuarioAtual();
-    if (usuario) {
-        await atualizarHistorico(usuario.id, mesSelecionado);
-        await atualizarDashboard();
-        await carregarScore(usuario.id, mesSelecionado);
-        await carregarAlertas(usuario.id, mesSelecionado);
-    }
-});
-
 // Tema
 document.getElementById('selectTema')?.addEventListener('change', function(e) {
     const tema = e.target.value;
@@ -237,13 +156,8 @@ if (temaSalvo === 'claro') {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Kawr Business v2.0 iniciando...');
     
-    // Verificar autenticação
-    if (AUTH.estaAutenticado()) {
-        esconder('#modalLogin');
-        inicializarDashboard();
-    } else {
-        mostrar('#modalLogin');
-    }
+    // Inicializar dashboard diretamente (sem autenticação)
+    inicializarDashboard();
 
     // Ir para dashboard por padrão
     irParaSecao('dashboard');

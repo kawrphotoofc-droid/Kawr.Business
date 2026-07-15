@@ -408,7 +408,7 @@ function criarNotificacao(mensagem, tipo = 'info', duracao = 3000) {
     };
 
     notif.style.cssText = `
-        background: ${cores[tipo] || cores['info'}}
+        background: ${cores[tipo] || cores['info']};
         color: white;
         padding: 12px 16px;
         border-radius: 8px;

@@ -5,16 +5,15 @@
 
 /**
  * Gera relatório PDF profissional
- * @param {string} usuarioId - ID do usuário
  * @param {string} mes - Mês (YYYY-MM)
  */
-async function gerarRelatorioPDF(usuarioId, mes) {
+async function gerarRelatorioPDF(mes) {
     try {
         // Obter dados
-        const empresa = await DB.obterEmpresa(usuarioId);
-        const financeiro = await DB.obterFinanceiro(usuarioId, mes);
-        const score = await DB.obterScore(usuarioId, mes);
-        const alertas = await DB.obterAlertas(usuarioId, mes);
+        const empresa = await DB.obterEmpresa();
+        const financeiro = await DB.obterFinanceiro(mes);
+        const score = await DB.obterScore(mes);
+        const alertas = await DB.obterAlertas(mes);
 
         if (!financeiro) {
             notificarErro("Nenhum dado financeiro para este mês");
@@ -109,10 +108,8 @@ async function gerarRelatorioPDF(usuarioId, mes) {
 
         yPos += 5;
 
-        // ===== SCORE GERAL =====
+        // ===== SCORE =====
         if (score) {
-            const faixa = obterFaixaScore(score.valor);
-            
             doc.setTextColor(212, 175, 55);
             doc.setFontSize(14);
             doc.setFont(undefined, 'bold');
@@ -121,129 +118,86 @@ async function gerarRelatorioPDF(usuarioId, mes) {
 
             doc.setTextColor(224, 224, 224);
             doc.setFontSize(11);
-            doc.setFont(undefined, 'normal');
-
-            // Desenhar barra de score
-            const barWidth = 100;
-            const barHeight = 8;
-            doc.setDrawColor(61, 61, 61);
-            doc.rect(margin, yPos, barWidth, barHeight);
-            
-            doc.setFillColor(212, 175, 55);
-            const fillWidth = (score.valor / 100) * barWidth;
-            doc.rect(margin, yPos, fillWidth, barHeight, 'F');
-
-            doc.setTextColor(224, 224, 224);
-            doc.setFont(undefined, 'bold');
-            doc.text(`${Math.round(score.valor)} - ${faixa.label}`, margin + barWidth + 5, yPos + 6);
-
-            yPos += 15;
-
-            // Fatores influentes
-            doc.setTextColor(212, 175, 55);
-            doc.setFontSize(11);
-            doc.setFont(undefined, 'bold');
-            doc.text('Fatores Influentes:', margin, yPos);
+            doc.text(`Pontuação: ${Math.round(score.valor)}/100`, margin, yPos);
             yPos += 6;
 
-            doc.setTextColor(224, 224, 224);
-            doc.setFontSize(9);
-            doc.setFont(undefined, 'normal');
-
-            score.fatoresInfluentes.slice(0, 5).forEach(fator => {
-                doc.text(`• ${fator.fator}: ${fator.impacto}`, margin + 5, yPos);
-                yPos += 5;
-            });
-
-            yPos += 5;
+            const faixa = obterFaixaScore(score.valor);
+            doc.text(`Status: ${faixa.label}`, margin, yPos);
+            yPos += 10;
         }
 
         // ===== ALERTAS =====
         if (alertas && alertas.length > 0) {
-            // Verificar se precisa de nova página
-            if (yPos > pageHeight - 60) {
-                doc.addPage();
-                yPos = 10;
-            }
-
             doc.setTextColor(212, 175, 55);
             doc.setFontSize(14);
             doc.setFont(undefined, 'bold');
-            doc.text('Alertas Identificados', margin, yPos);
+            doc.text('Alertas', margin, yPos);
             yPos += 8;
 
             doc.setTextColor(224, 224, 224);
             doc.setFontSize(9);
-            doc.setFont(undefined, 'normal');
 
             alertas.slice(0, 5).forEach(alerta => {
+                doc.setFont(undefined, 'bold');
+                doc.text(`• ${alerta.titulo}`, margin + 5, yPos);
+                yPos += 4;
+
+                doc.setFont(undefined, 'normal');
+                const linhas = doc.splitTextToSize(alerta.mensagem, contentWidth - 10);
+                linhas.forEach(linha => {
+                    doc.text(linha, margin + 10, yPos);
+                    yPos += 3;
+                });
+                yPos += 2;
+
                 if (yPos > pageHeight - 20) {
                     doc.addPage();
                     yPos = 10;
                 }
-
-                doc.setFont(undefined, 'bold');
-                doc.text(`⚠ ${alerta.titulo}`, margin + 2, yPos);
-                yPos += 5;
-
-                doc.setFont(undefined, 'normal');
-                const lines = doc.splitTextToSize(alerta.mensagem, contentWidth - 5);
-                doc.text(lines, margin + 5, yPos);
-                yPos += (lines.length * 4) + 3;
             });
-
-            yPos += 5;
         }
 
         // ===== RODAPÉ =====
-        doc.setTextColor(160, 160, 160);
+        doc.setTextColor(100, 100, 100);
         doc.setFontSize(8);
-        doc.setFont(undefined, 'normal');
-        doc.text(
-            `Relatório gerado em ${formatarData(new Date())} | Kawr Business v2.0`,
-            margin,
-            pageHeight - 5
-        );
+        doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, margin, pageHeight - 10);
+        doc.text('Kawr Business - Gestão Financeira Inteligente', margin, pageHeight - 5);
 
-        // ===== SALVAR =====
-        const nomeArquivo = `Kawr_Business_${mes}_${new Date().getTime()}.pdf`;
-        doc.save(nomeArquivo);
-
-        notificarSucesso(`Relatório gerado: ${nomeArquivo}`);
+        // Salvar PDF
+        doc.save(`Relatorio_Kawr_${mes}.pdf`);
+        notificarSucesso("Relatório gerado com sucesso!");
 
     } catch (erro) {
-        console.error("Erro ao gerar PDF:", erro);
-        notificarErro("Erro ao gerar relatório: " + erro.message);
+        console.error("Erro ao gerar relatório:", erro);
+        notificarErro("Erro ao gerar relatório");
     }
 }
 
 /**
- * Exporta dados para CSV
- * @param {string} usuarioId - ID do usuário
+ * Exporta dados em CSV
  */
-async function exportarCSV(usuarioId) {
+async function exportarCSV() {
     try {
-        const historico = await DB.obterHistorico(usuarioId);
-        
+        const historico = await DB.obterHistorico();
+
         if (Object.keys(historico).length === 0) {
             notificarErro("Nenhum dado para exportar");
             return;
         }
 
-        let csv = 'Mês,Receita,Despesas,Lucro,Margem,Impostos,Fluxo de Caixa\n';
+        let csv = 'Mês,Receita Bruta,Despesas,Lucro Líquido,Margem,Impostos,Fluxo de Caixa\n';
 
         Object.keys(historico).sort().forEach(mes => {
             const f = historico[mes];
             csv += `${mes},${f.receitaBruta},${f.despesasTotal},${f.lucroLiquido},${f.margem.toFixed(2)},${f.impostos},${f.fluxoCaixa}\n`;
         });
 
-        // Criar blob e download
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
         const url = URL.createObjectURL(blob);
 
         link.setAttribute('href', url);
-        link.setAttribute('download', `Kawr_Business_Historico_${new Date().getTime()}.csv`);
+        link.setAttribute('download', `Dados_Kawr_${obterMesAtual()}.csv`);
         link.style.visibility = 'hidden';
 
         document.body.appendChild(link);
@@ -261,11 +215,8 @@ async function exportarCSV(usuarioId) {
 // ===== EVENT LISTENERS =====
 
 document.getElementById('btnGerarPDF')?.addEventListener('click', async function() {
-    const usuario = AUTH.obterUsuarioAtual();
-    if (usuario) {
-        const mes = obterMesAtual();
-        await gerarRelatorioPDF(usuario.id, mes);
-    }
+    const mes = obterMesAtual();
+    await gerarRelatorioPDF(mes);
 });
 
 console.log("✅ Relatorios carregado");
