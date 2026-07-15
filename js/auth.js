@@ -33,7 +33,8 @@ const AUTH = {
                     return;
                 }
 
-                if (this.usuarios[email]) {
+                const emailLower = email.toLowerCase();
+                if (this.usuarios[emailLower]) {
                     reject(new Error("Este email já está cadastrado. Tente fazer login."));
                     return;
                 }

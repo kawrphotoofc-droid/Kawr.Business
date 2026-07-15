@@ -343,7 +343,10 @@ async function salvarDadosFinanceiro() {
 
 // ===== EVENT LISTENERS =====
 
-document.getElementById('btnSalvarDados')?.addEventListener('click', salvarDadosFinanceiro);
+document.getElementById('btnSalvarDados')?.addEventListener('click', async function() {
+    await salvarDadosEmpresa();
+    await salvarDadosFinanceiro();
+});
 
 document.getElementById('btnLimparDados')?.addEventListener('click', async function() {
     if (confirm("Tem certeza? Todos os dados serão removidos permanentemente.")) {
