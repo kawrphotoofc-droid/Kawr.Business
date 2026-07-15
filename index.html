@@ -1,347 +1,482 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Kawr Business Beta 1.0</title>
-
-<link rel="stylesheet" href="css/style.css">
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kawr Business v2.0</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
-
 <body>
-
-<header>
-
-<div class="logo">
-
-<h1>Kawr Business</h1>
-
-<p>Beta 1.0</p>
-
-</div>
-
-<nav>
-
-<a href="#inicio">Início</a>
-
-<a href="#dashboard">Dashboard</a>
-
-<a href="#quemSomos">Quem Somos</a>
-
-<a href="#solucoes">Soluções</a>
-
-<a href="#atualizacoes">Atualizações</a>
-
-<a href="#aviso">Aviso</a>
-
-</nav>
-
-</header>
-
-<section id="inicio" class="hero">
-
-<h1>Gestão Financeira Inteligente</h1>
-
-<p>
-
-Transformando números em decisões.
-
-</p>
-
-<button>
-
-Conhecer o Sistema
-
-</button>
-
-</section>
-
-<section id="dashboard">
-
-<h2>
-
-Dashboard
-
-</h2>
-
-<div class="container">
-
-<div class="empresario">
-
-<h2>
-
-Empresário
-
-</h2>
-
-<div class="card">
-
-<h3>Score Financeiro</h3>
-
-<div id="score">
-
-90
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h3>Receita</h3>
-
-<p id="receita">
-
-R$ 0,00
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Despesas</h3>
-
-<p id="despesas">
-
-R$ 0,00
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Lucro</h3>
-
-<p id="lucro">
-
-R$ 0,00
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Alertas</h3>
-
-<div id="alertas"></div>
-
-</div>
-
-<canvas id="graficoReceita"></canvas>
-
-<canvas id="graficoDespesa"></canvas>
-
-</div>
-
-<div class="contador">
-
-<h2>
-
-Contador
-
-</h2>
-
-<div class="card">
-
-<label>
-
-CNAE
-
-</label>
-
-<input type="text" id="cnae">
-
-</div>
-
-<div class="card">
-
-<label>
-
-Regime Tributário
-
-</label>
-
-<select id="regime">
-
-<option>Simples Nacional</option>
-
-<option>Lucro Presumido</option>
-
-<option>Lucro Real</option>
-
-</select>
-
-</div>
-
-<div class="card">
-
-<label>
-
-Receita Bruta
-
-</label>
-
-<input type="number" id="receitaBruta">
-
-</div>
-
-<div class="card">
-
-<label>
-
-Folha de Pagamento
-
-</label>
-
-<input type="number" id="folha">
-
-</div>
-
-<div class="card">
-
-<h3>
-
-Resultado Tributário
-
-</h3>
-
-<p id="anexo"></p>
-
-<p id="aliquota"></p>
-
-<p id="fatorR"></p>
-
-<p id="das"></p>
-
-</div>
-
-<button id="btnCalculos">
-
-Ver Cálculos
-
-</button>
-
-<div id="memoriaCalculo">
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<section id="quemSomos">
-
-<h2>
-
-Quem Somos
-
-</h2>
-
-<p>
-
-Somos uma startup que auxilia empresários e contadores na organização financeira e tributária.
-
-</p>
-
-</section>
-
-<section id="solucoes">
-
-<h2>
-
-O que resolvemos
-
-</h2>
-
-<ul>
-
-<li>Organização Financeira</li>
-
-<li>Cálculo Tributário</li>
-
-<li>Score Financeiro</li>
-
-<li>Memória de Cálculo</li>
-
-<li>Indicadores Inteligentes</li>
-
-</ul>
-
-</section>
-
-<section id="atualizacoes">
-
-<h2>
-
-Próximas Atualizações
-
-</h2>
-
-<ul>
-
-<li>Exportação em PDF</li>
-
-<li>Login</li>
-
-<li>Banco de Dados</li>
-
-<li>IA</li>
-
-<li>Melhores Gráficos</li>
-
-<li>Aplicativo</li>
-
-</ul>
-
-</section>
-
-<section id="aviso">
-
-<h2>
-
-Aviso
-
-</h2>
-
-<p>
-
-O Kawr Business é uma ferramenta de apoio para empresas e profissionais da contabilidade.
-
-Não substitui o contador nem fornece garantia de conformidade fiscal. As decisões tributárias devem ser analisadas por um profissional habilitado.
-
-</p>
-
-</section>
-
-<footer>
-
-<p>
-
-© 2026 Kawr Business Beta 1.0
-
-</p>
-
-</footer>
-
-<script src="js/script.js"></script>
-
-<script src="js/impostos.js"></script>
-
-<script src="js/score.js"></script>
-
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Kawr Business</h2>
+            <span class="version">v2.0</span>
+            <button class="toggle-sidebar" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#financeiro" class="nav-item" data-section="financeiro">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Financeiro</span>
+            </a>
+            <a href="#graficos" class="nav-item" data-section="graficos">
+                <i class="fas fa-chart-bar"></i>
+                <span>Gráficos</span>
+            </a>
+            <a href="#relatorios" class="nav-item" data-section="relatorios">
+                <i class="fas fa-file-pdf"></i>
+                <span>Relatórios</span>
+            </a>
+            <a href="#historico" class="nav-item" data-section="historico">
+                <i class="fas fa-calendar"></i>
+                <span>Histórico</span>
+            </a>
+            <a href="#alertas" class="nav-item" data-section="alertas">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Alertas</span>
+            </a>
+            <a href="#configuracoes" class="nav-item" data-section="configuracoes">
+                <i class="fas fa-cog"></i>
+                <span>Configurações</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="btn-logout" id="btnLogout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sair</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- TOP BAR -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <h3 id="empresaNome">Minha Empresa</h3>
+                <p id="dataAtual">15 de Julho de 2026</p>
+            </div>
+            <div class="top-bar-right">
+                <p id="saudacao">Bem-vindo!</p>
+                <span class="version-badge">v2.0</span>
+            </div>
+        </div>
+
+        <!-- DASHBOARD SECTION -->
+        <section id="dashboard" class="section active">
+            <div class="section-header">
+                <h1>Dashboard</h1>
+                <p>Visão geral da sua empresa</p>
+            </div>
+
+            <!-- CARDS PRINCIPAIS -->
+            <div class="cards-grid">
+                <!-- Card: Receita -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <i class="fas fa-arrow-up card-icon receita"></i>
+                        <h3>Receita</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-value" id="cardReceita">R$ 0,00</p>
+                        <p class="card-comparison" id="compReceita">
+                            <span class="badge-up">↑ +0%</span> vs. mês anterior
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card: Lucro Líquido -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <i class="fas fa-chart-line card-icon lucro"></i>
+                        <h3>Lucro Líquido</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-value" id="cardLucro">R$ 0,00</p>
+                        <p class="card-comparison" id="compLucro">
+                            <span class="badge-up">↑ +0%</span> vs. mês anterior
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card: Despesas -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <i class="fas fa-arrow-down card-icon despesa"></i>
+                        <h3>Despesas</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-value" id="cardDespesas">R$ 0,00</p>
+                        <p class="card-comparison" id="compDespesas">
+                            <span class="badge-down">↓ -0%</span> vs. mês anterior
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card: Fluxo de Caixa -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <i class="fas fa-water card-icon fluxo"></i>
+                        <h3>Fluxo de Caixa</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-value" id="cardFluxo">R$ 0,00</p>
+                        <p class="card-comparison" id="compFluxo">
+                            <span class="badge-up">↑ Saudável</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card: Impostos -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <i class="fas fa-receipt card-icon imposto"></i>
+                        <h3>Impostos</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-value" id="cardImpostos">R$ 0,00</p>
+                        <p class="card-comparison" id="compImpostos">
+                            <span class="badge-info">DAS Estimado</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card: Score Geral -->
+                <div class="card card-score">
+                    <div class="card-header">
+                        <i class="fas fa-star card-icon score"></i>
+                        <h3>Score Geral</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="score-display">
+                            <p class="score-value" id="cardScore">0</p>
+                            <p class="score-label" id="scoreLabelStatus">Aguardando dados</p>
+                        </div>
+                        <div class="score-bar">
+                            <div class="score-fill" id="scoreFill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCORE INSIGHTS -->
+            <div class="insights-section">
+                <h2>Análise Inteligente</h2>
+                <div class="insights-box" id="insightsBox">
+                    <p>Preencha os dados financeiros para receber recomendações personalizadas.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FINANCEIRO SECTION -->
+        <section id="financeiro" class="section">
+            <div class="section-header">
+                <h1>Financeiro</h1>
+                <p>Gestão de receitas, despesas e impostos</p>
+            </div>
+
+            <div class="form-container">
+                <div class="form-group">
+                    <h3>Dados da Empresa</h3>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>Nome da Empresa</label>
+                            <input type="text" id="inputEmpresa" placeholder="Sua empresa">
+                        </div>
+                        <div class="form-field">
+                            <label>CNPJ</label>
+                            <input type="text" id="inputCNPJ" placeholder="00.000.000/0000-00">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>Tipo de Empresa</label>
+                            <select id="inputTipo">
+                                <option value="">Selecione...</option>
+                                <option value="MEI">MEI</option>
+                                <option value="ME">ME</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label>Regime Tributário</label>
+                            <select id="inputRegime">
+                                <option value="">Selecione...</option>
+                                <option value="simples">Simples Nacional</option>
+                                <option value="presumido">Lucro Presumido</option>
+                                <option value="real">Lucro Real</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>Dados Financeiros do Mês</h3>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>Receita Bruta</label>
+                            <input type="number" id="inputReceitaBruta" placeholder="0,00" min="0">
+                        </div>
+                        <div class="form-field">
+                            <label>Despesas Totais</label>
+                            <input type="number" id="inputDespesasTotal" placeholder="0,00" min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>Folha de Pagamento</label>
+                            <input type="number" id="inputFolha" placeholder="0,00" min="0">
+                        </div>
+                        <div class="form-field">
+                            <label>Data do Período</label>
+                            <input type="month" id="inputPeriodo">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" id="btnSalvarDados">
+                    <i class="fas fa-save"></i> Salvar Dados
+                </button>
+            </div>
+
+            <!-- MEMÓRIA DE CÁLCULO -->
+            <div class="memoria-section" id="memoriaSection" style="display: none;">
+                <h3>Memória de Cálculo</h3>
+                <div class="memoria-box" id="memoriaBox"></div>
+            </div>
+        </section>
+
+        <!-- GRÁFICOS SECTION -->
+        <section id="graficos" class="section">
+            <div class="section-header">
+                <h1>Gráficos</h1>
+                <p>Visualização dos indicadores financeiros</p>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3>Receita Mensal</h3>
+                    <canvas id="chartReceita"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Evolução do Lucro</h3>
+                    <canvas id="chartLucro"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Fluxo de Caixa</h3>
+                    <canvas id="chartFluxo"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Receita x Custos</h3>
+                    <canvas id="chartComparativo"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Distribuição Financeira</h3>
+                    <canvas id="chartDistribuicao"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Evolução do Score</h3>
+                    <canvas id="chartScore"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- RELATÓRIOS SECTION -->
+        <section id="relatorios" class="section">
+            <div class="section-header">
+                <h1>Relatórios</h1>
+                <p>Gere relatórios profissionais em PDF</p>
+            </div>
+
+            <div class="relatorio-container">
+                <div class="relatorio-card">
+                    <i class="fas fa-file-pdf"></i>
+                    <h3>Relatório Mensal</h3>
+                    <p>Resumo completo com todos os indicadores e gráficos</p>
+                    <button class="btn btn-secondary" id="btnGerarPDF">
+                        <i class="fas fa-download"></i> Gerar PDF
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- HISTÓRICO SECTION -->
+        <section id="historico" class="section">
+            <div class="section-header">
+                <h1>Histórico</h1>
+                <p>Acompanhe a evolução mensal da sua empresa</p>
+            </div>
+
+            <div class="historico-container">
+                <div class="historico-nav">
+                    <button class="btn-nav" id="btnMesAnterior">← Mês Anterior</button>
+                    <span id="mesSelecionado">Julho 2026</span>
+                    <button class="btn-nav" id="btnProxMes">Próximo Mês →</button>
+                </div>
+
+                <div class="historico-cards">
+                    <div class="historico-card">
+                        <label>Receita</label>
+                        <p id="histReceita">R$ 0,00</p>
+                        <span id="histReceitaComp" class="comparison">-</span>
+                    </div>
+                    <div class="historico-card">
+                        <label>Lucro</label>
+                        <p id="histLucro">R$ 0,00</p>
+                        <span id="histLucroComp" class="comparison">-</span>
+                    </div>
+                    <div class="historico-card">
+                        <label>Despesas</label>
+                        <p id="histDespesas">R$ 0,00</p>
+                        <span id="histDespesasComp" class="comparison">-</span>
+                    </div>
+                    <div class="historico-card">
+                        <label>Fluxo de Caixa</label>
+                        <p id="histFluxo">R$ 0,00</p>
+                        <span id="histFluxoComp" class="comparison">-</span>
+                    </div>
+                    <div class="historico-card">
+                        <label>Score</label>
+                        <p id="histScore">0</p>
+                        <span id="histScoreComp" class="comparison">-</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ALERTAS SECTION -->
+        <section id="alertas" class="section">
+            <div class="section-header">
+                <h1>Alertas</h1>
+                <p>Problemas e recomendações identificados</p>
+            </div>
+
+            <div class="alertas-container" id="alertasContainer">
+                <p class="empty-state">Nenhum alerta no momento. Parabéns!</p>
+            </div>
+        </section>
+
+        <!-- CONFIGURAÇÕES SECTION -->
+        <section id="configuracoes" class="section">
+            <div class="section-header">
+                <h1>Configurações</h1>
+                <p>Personalize seu sistema</p>
+            </div>
+
+            <div class="config-container">
+                <div class="config-group">
+                    <h3>Dados da Empresa</h3>
+                    <div class="config-item">
+                        <label>Nome</label>
+                        <p id="configEmpresa">-</p>
+                    </div>
+                    <div class="config-item">
+                        <label>CNPJ</label>
+                        <p id="configCNPJ">-</p>
+                    </div>
+                    <div class="config-item">
+                        <label>Tipo</label>
+                        <p id="configTipo">-</p>
+                    </div>
+                </div>
+
+                <div class="config-group">
+                    <h3>Preferências</h3>
+                    <div class="config-item">
+                        <label>Tema</label>
+                        <select id="selectTema">
+                            <option value="escuro">Escuro (Padrão)</option>
+                            <option value="claro">Claro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="config-group">
+                    <h3>Conta</h3>
+                    <button class="btn btn-danger" id="btnLimparDados">
+                        <i class="fas fa-trash"></i> Limpar Todos os Dados
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL: LOGIN -->
+    <div class="modal" id="modalLogin">
+        <div class="modal-content">
+            <h2>Kawr Business v2.0</h2>
+            <p>Gestão Financeira Inteligente</p>
+            
+            <div class="login-tabs">
+                <button class="tab-btn active" id="tabLogin">Login</button>
+                <button class="tab-btn" id="tabCadastro">Cadastro</button>
+            </div>
+
+            <!-- TAB: LOGIN -->
+            <div class="tab-content active" id="tabLoginContent">
+                <form id="formLogin">
+                    <div class="form-field">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                    </div>
+                    <div class="form-field">
+                        <label>Senha</label>
+                        <input type="password" id="loginSenha" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                    <p class="form-link">
+                        <a href="#" id="linkRecuperarSenha">Esqueceu a senha?</a>
+                    </p>
+                </form>
+            </div>
+
+            <!-- TAB: CADASTRO -->
+            <div class="tab-content" id="tabCadastroContent">
+                <form id="formCadastro">
+                    <div class="form-field">
+                        <label>Nome</label>
+                        <input type="text" id="cadastroNome" placeholder="Seu nome" required>
+                    </div>
+                    <div class="form-field">
+                        <label>Email</label>
+                        <input type="email" id="cadastroEmail" placeholder="seu@email.com" required>
+                    </div>
+                    <div class="form-field">
+                        <label>Senha</label>
+                        <input type="password" id="cadastroSenha" placeholder="••••••••" required>
+                    </div>
+                    <div class="form-field">
+                        <label>Confirmar Senha</label>
+                        <input type="password" id="cadastroConfirm" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Criar Conta</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/score.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/alerts.js"></script>
+    <script src="js/relatorios.js"></script>
+    <script src="js/app.js"></script>
 </body>
-
-  </html>
+</html>
