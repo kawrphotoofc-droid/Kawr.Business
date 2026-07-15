@@ -368,13 +368,106 @@ function removerClasse(elemento, classe) {
 // ===== NOTIFICAÇÕES =====
 
 /**
+ * Cria e mostra notificação visual
+ * @param {string} mensagem - Mensagem a exibir
+ * @param {string} tipo - Tipo: 'sucesso', 'erro', 'aviso'
+ * @param {number} duracao - Duração em ms
+ */
+function criarNotificacao(mensagem, tipo = 'info', duracao = 3000) {
+    // Criar container se não existir
+    let container = document.getElementById('notificacoes-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'notificacoes-container';
+        container.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+        `;
+        document.body.appendChild(container);
+    }
+
+    // Criar notificação
+    const notif = document.createElement('div');
+    const cores = {
+        'sucesso': '#10b981',
+        'erro': '#ef4444',
+        'aviso': '#f59e0b',
+        'info': '#3b82f6'
+    };
+    const icones = {
+        'sucesso': '✅',
+        'erro': '❌',
+        'aviso': '⚠️',
+        'info': 'ℹ️'
+    };
+
+    notif.style.cssText = `
+        background: ${cores[tipo] || cores['info'}}
+        color: white;
+        padding: 12px 16px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        font-size: 14px;
+        font-weight: 500;
+        animation: slideIn 0.3s ease-out;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    `;
+    notif.innerHTML = `<span>${icones[tipo]}</span><span>${mensagem}</span>`;
+
+    container.appendChild(notif);
+
+    // Auto remover
+    setTimeout(() => {
+        notif.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => notif.remove(), 300);
+    }, duracao);
+}
+
+// Adicionar animações CSS
+if (!document.getElementById('notificacoes-style')) {
+    const style = document.createElement('style');
+    style.id = 'notificacoes-style';
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+/**
  * Mostra notificação de sucesso
  * @param {string} mensagem - Mensagem a exibir
  * @param {number} duracao - Duração em ms (padrão: 3000)
  */
 function notificarSucesso(mensagem, duracao = 3000) {
     console.log("✅ " + mensagem);
-    // TODO: Implementar notificação visual
+    criarNotificacao(mensagem, 'sucesso', duracao);
 }
 
 /**
@@ -384,7 +477,7 @@ function notificarSucesso(mensagem, duracao = 3000) {
  */
 function notificarErro(mensagem, duracao = 5000) {
     console.error("❌ " + mensagem);
-    // TODO: Implementar notificação visual
+    criarNotificacao(mensagem, 'erro', duracao);
 }
 
 /**
@@ -394,7 +487,17 @@ function notificarErro(mensagem, duracao = 5000) {
  */
 function notificarAviso(mensagem, duracao = 4000) {
     console.warn("⚠️ " + mensagem);
-    // TODO: Implementar notificação visual
+    criarNotificacao(mensagem, 'aviso', duracao);
+}
+
+/**
+ * Mostra notificação de informação
+ * @param {string} mensagem - Mensagem a exibir
+ * @param {number} duracao - Duração em ms (padrão: 3000)
+ */
+function notificarInfo(mensagem, duracao = 3000) {
+    console.info("ℹ️ " + mensagem);
+    criarNotificacao(mensagem, 'info', duracao);
 }
 
 // ===== DATAS =====
