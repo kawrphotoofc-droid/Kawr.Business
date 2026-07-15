@@ -244,10 +244,25 @@
                 </button>
             </div>
 
-            <!-- MEMÓRIA DE CÁLCULO -->
+            <!-- BOTÃO VER CÁLCULOS -->
+            <div id="verCalculosWrapper" style="display: none;">
+                <button class="btn-ver-calculos" id="btnVerCalculos" aria-expanded="false" aria-controls="memoriaCollapsible">
+                    <i class="fas fa-calculator"></i>
+                    <span id="btnVerCalculosLabel">Ver Cálculos</span>
+                    <i class="fas fa-chevron-down" style="margin-left: 4px; font-size: 0.8rem;"></i>
+                </button>
+            </div>
+
+            <!-- MEMÓRIA DE CÁLCULO (colapsável) -->
             <div class="memoria-section" id="memoriaSection" style="display: none;">
-                <h3>Memória de Cálculo</h3>
-                <div class="memoria-box" id="memoriaBox"></div>
+                <div class="memoria-header">
+                    <h3><i class="fas fa-file-alt" style="margin-right: 8px; opacity: 0.8;"></i>Memória de Cálculo</h3>
+                </div>
+                <div class="memoria-collapsible" id="memoriaCollapsible">
+                    <div class="memoria-collapsible-inner">
+                        <div class="memoria-box" id="memoriaBox"></div>
+                    </div>
+                </div>
             </div>
         </section>
 
