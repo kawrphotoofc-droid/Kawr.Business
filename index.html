@@ -1,394 +1,329 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kawr Business v2.0</title>
+    <title>Kawr Business — Inteligência Contábil & Financeira</title>
     <link rel="stylesheet" href="css/style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
-    <!-- SIDEBAR -->
+    <!-- Overlay for Mobile Menu -->
+    <div id="menu-overlay" class="overlay"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-k">K</span><span class="logo-b">B</span>
+            <span class="logo-text">KAWR BUSINESS</span>
+        </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Sidebar Menu (Hamburger) -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h2>Kawr Business</h2>
-            <span class="version">v2.0</span>
-            <button class="toggle-sidebar" id="toggleSidebar">
-                <i class="fas fa-bars"></i>
-            </button>
+            <i class="fas fa-times close-menu" id="close-menu"></i>
         </div>
-
-        <nav class="sidebar-nav">
-            <a href="#dashboard" class="nav-item active" data-section="dashboard">
-                <i class="fas fa-home"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="#financeiro" class="nav-item" data-section="financeiro">
-                <i class="fas fa-money-bill-wave"></i>
-                <span>Financeiro</span>
-            </a>
-            <a href="#graficos" class="nav-item" data-section="graficos">
-                <i class="fas fa-chart-bar"></i>
-                <span>Gráficos</span>
-            </a>
-            <a href="#relatorios" class="nav-item" data-section="relatorios">
-                <i class="fas fa-file-pdf"></i>
-                <span>Relatórios</span>
-            </a>
-
-            <a href="#alertas" class="nav-item" data-section="alertas">
-                <i class="fas fa-exclamation-triangle"></i>
-                <span>Alertas</span>
-            </a>
-            <a href="#configuracoes" class="nav-item" data-section="configuracoes">
-                <i class="fas fa-cog"></i>
-                <span>Configurações</span>
-            </a>
-        </nav>
-
-
+        <ul class="nav-links">
+            <li class="nav-item active" data-section="visita">
+                <i class="fas fa-home"></i> Início
+            </li>
+            <li class="nav-item" data-section="empreendedor">
+                <i class="fas fa-chart-line"></i> Painel do Empreendedor
+            </li>
+            <li class="nav-item" data-section="contador">
+                <i class="fas fa-calculator"></i> Painel do Contador
+            </li>
+            <li class="nav-item" data-section="calculadora">
+                <i class="fas fa-calculator"></i> Calculadora Multifunções
+            </li>
+            <li class="nav-item" data-section="alertas">
+                <i class="fas fa-exclamation-triangle"></i> Alertas de Urgência
+            </li>
+            <li class="nav-item" data-section="faq">
+                <i class="fas fa-question-circle"></i> FAQ / Ajuda
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <p>Kawr Office &copy; 2026</p>
+        </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
-    <main class="main-content">
-        <!-- TOP BAR -->
-        <div class="top-bar">
-            <div class="top-bar-left">
-                <h3 id="empresaNome">Minha Empresa</h3>
-                <p id="dataAtual">15 de Julho de 2026</p>
+    <!-- Main Content Area -->
+    <main id="main-content">
+        <!-- Section: Landing Page (Visita) -->
+        <section id="visita" class="content-section active">
+            <div class="hero">
+                <h1>KAWR BUSINESS</h1>
+                <h2>Transformando dados em decisões inteligentes.</h2>
+                <p>A plataforma premium que une o empresário e o contador em um único ecossistema elegante de alta performance.</p>
+                <button class="cta-button" onclick="navigateTo('empreendedor')">Entrar no Sistema <i class="fas fa-arrow-right"></i></button>
             </div>
-            <div class="top-bar-right">
-                <p id="saudacao">Bem-vindo!</p>
-                <span class="version-badge">v2.0</span>
-            </div>
-        </div>
-
-        <!-- DASHBOARD SECTION -->
-        <section id="dashboard" class="section active">
-            <div class="section-header">
-                <h1>Dashboard</h1>
-                <p>Visão geral da sua empresa</p>
-            </div>
-
-            <!-- CARDS PRINCIPAIS -->
-            <div class="cards-grid">
-                <!-- Card: Receita -->
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <i class="fas fa-arrow-up card-icon receita"></i>
-                        <h3>Receita</h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-value" id="cardReceita">R$ 0,00</p>
-                        <p class="card-comparison" id="compReceita">
-                            <span class="badge-up">↑ +0%</span> vs. mês anterior
-                        </p>
-                    </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-gem"></i>
+                    <h3>Visão Premium</h3>
+                    <p>Design sofisticado focado em clareza e tomada de decisão estratégica.</p>
                 </div>
-
-                <!-- Card: Lucro Líquido -->
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <i class="fas fa-chart-line card-icon lucro"></i>
-                        <h3>Lucro Líquido</h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-value" id="cardLucro">R$ 0,00</p>
-                        <p class="card-comparison" id="compLucro">
-                            <span class="badge-up">↑ +0%</span> vs. mês anterior
-                        </p>
-                    </div>
+                <div class="feature-card">
+                    <i class="fas fa-microchip"></i>
+                    <h3>Inteligência Contábil</h3>
+                    <p>Cálculos precisos de impostos e simulações tributárias avançadas.</p>
                 </div>
-
-                <!-- Card: Despesas -->
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <i class="fas fa-arrow-down card-icon despesa"></i>
-                        <h3>Despesas</h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-value" id="cardDespesas">R$ 0,00</p>
-                        <p class="card-comparison" id="compDespesas">
-                            <span class="badge-down">↓ -0%</span> vs. mês anterior
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Card: Fluxo de Caixa -->
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <i class="fas fa-water card-icon fluxo"></i>
-                        <h3>Fluxo de Caixa</h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-value" id="cardFluxo">R$ 0,00</p>
-                        <p class="card-comparison" id="compFluxo">
-                            <span class="badge-up">↑ Saudável</span>
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Card: Impostos -->
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <i class="fas fa-receipt card-icon imposto"></i>
-                        <h3>Impostos</h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-value" id="cardImpostos">R$ 0,00</p>
-                        <p class="card-comparison" id="compImpostos">
-                            <span class="badge-info">DAS Estimado</span>
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Card: Score Geral -->
-                <div class="card card-score">
-                    <div class="card-header">
-                        <i class="fas fa-star card-icon score"></i>
-                        <h3>Score Geral</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="score-display">
-                            <p class="score-value" id="cardScore">0</p>
-                            <p class="score-label" id="scoreLabelStatus">Aguardando dados</p>
-                        </div>
-                        <div class="score-bar">
-                            <div class="score-fill" id="scoreFill" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SCORE INSIGHTS -->
-            <div class="insights-section">
-                <h2>Análise Inteligente</h2>
-                <div class="insights-box" id="insightsBox">
-                    <p>Preencha os dados financeiros para receber recomendações personalizadas.</p>
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Saúde Financeira</h3>
+                    <p>Monitoramento constante do score de saúde da sua empresa.</p>
                 </div>
             </div>
         </section>
 
-        <!-- FINANCEIRO SECTION -->
-        <section id="financeiro" class="section">
-            <div class="section-header">
-                <h1>Financeiro</h1>
-                <p>Gestão de receitas, despesas e impostos</p>
+        <!-- Section: Painel do Empreendedor -->
+        <section id="empreendedor" class="content-section">
+            <header class="section-header">
+                <h2>Painel do Empreendedor</h2>
+                <p>Visão macrossistêmica do seu negócio.</p>
+            </header>
+            
+            <div class="dashboard-cards">
+                <div class="card">
+                    <span class="card-label">Receita Bruta</span>
+                    <span class="card-value">R$ 125.400,00</span>
+                    <span class="card-trend up"><i class="fas fa-caret-up"></i> 12%</span>
+                </div>
+                <div class="card">
+                    <span class="card-label">Custos Variáveis</span>
+                    <span class="card-value">R$ 45.200,00</span>
+                </div>
+                <div class="card">
+                    <span class="card-label">Despesas Fixas</span>
+                    <span class="card-value">R$ 22.000,00</span>
+                </div>
+                <div class="card">
+                    <span class="card-label">Lucro Líquido</span>
+                    <span class="card-value highlight">R$ 58.200,00</span>
+                </div>
             </div>
 
-            <div class="form-container">
-                <div class="form-group">
-                    <h3>Dados da Empresa</h3>
-                    <div class="form-row">
-                        <div class="form-field">
-                            <label>Nome da Empresa</label>
-                            <input type="text" id="inputEmpresa" placeholder="Sua empresa">
-                        </div>
-                        <div class="form-field">
-                            <label>CNPJ</label>
-                            <input type="text" id="inputCNPJ" placeholder="00.000.000/0000-00">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-field">
-                            <label>Tipo de Empresa</label>
-                            <select id="inputTipo">
-                                <option value="">Selecione...</option>
-                                <option value="MEI">MEI</option>
-                                <option value="ME">ME</option>
-                            </select>
-                        </div>
-                        <div class="form-field">
-                            <label>Regime Tributário</label>
-                            <select id="inputRegime">
-                                <option value="">Selecione...</option>
-                                <option value="simples">Simples Nacional</option>
-                                <option value="presumido">Lucro Presumido</option>
-                                <option value="real">Lucro Real</option>
-                            </select>
-                        </div>
-                    </div>
+            <div class="charts-container">
+                <div class="chart-box">
+                    <h3>Entradas x Saídas</h3>
+                    <canvas id="lineChart"></canvas>
                 </div>
-
-                <div class="form-group">
-                    <h3>Dados Financeiros do Mês</h3>
-                    <div class="form-row">
-                        <div class="form-field">
-                            <label>Receita Bruta</label>
-                            <input type="number" id="inputReceitaBruta" placeholder="0,00" min="0">
-                        </div>
-                        <div class="form-field">
-                            <label>Despesas Totais</label>
-                            <input type="number" id="inputDespesasTotal" placeholder="0,00" min="0">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-field">
-                            <label>Folha de Pagamento</label>
-                            <input type="number" id="inputFolha" placeholder="0,00" min="0">
-                        </div>
-                        <div class="form-field">
-                            <label>Data do Período</label>
-                            <input type="month" id="inputPeriodo">
-                        </div>
-                    </div>
+                <div class="chart-box">
+                    <h3>Fluxo Mensal</h3>
+                    <canvas id="barChart"></canvas>
                 </div>
-
-                <button class="btn btn-primary" id="btnSalvarDados">
-                    <i class="fas fa-save"></i> Salvar Dados
-                </button>
             </div>
 
-            <!-- BOTÃO VER CÁLCULOS -->
-            <div id="verCalculosWrapper" style="display: none;">
-                <button class="btn-ver-calculos" id="btnVerCalculos" aria-expanded="false" aria-controls="memoriaCollapsible">
-                    <i class="fas fa-calculator"></i>
-                    <span id="btnVerCalculosLabel">Ver Cálculos</span>
-                    <i class="fas fa-chevron-down" style="margin-left: 4px; font-size: 0.8rem;"></i>
-                </button>
+            <div class="score-section">
+                <div class="score-card">
+                    <h3>Score Financeiro Kawr</h3>
+                    <div class="score-display">
+                        <div class="score-circle">
+                            <span id="score-number">858</span>
+                            <span class="score-max">/ 1000</span>
+                        </div>
+                        <div class="score-status">Saudável</div>
+                    </div>
+                    <div class="score-details">
+                        <div class="detail"><span>Liquidez:</span> <div class="progress"><div class="bar" style="width: 85%"></div></div></div>
+                        <div class="detail"><span>Rentabilidade:</span> <div class="progress"><div class="bar" style="width: 78%"></div></div></div>
+                        <div class="detail"><span>Endividamento:</span> <div class="progress"><div class="bar" style="width: 20%"></div></div></div>
+                        <div class="detail"><span>Alavancagem:</span> <div class="progress"><div class="bar" style="width: 45%"></div></div></div>
+                    </div>
+                </div>
+                <div class="tips-card">
+                    <h3>Dicas de Gestão</h3>
+                    <ul class="tips-list">
+                        <li><i class="fas fa-lightbulb"></i> <strong>Precificação:</strong> Revise suas margens trimestralmente para cobrir a inflação.</li>
+                        <li><i class="fas fa-lightbulb"></i> <strong>Estoque:</strong> O custo de oportunidade do capital parado pode estar afetando seu lucro.</li>
+                        <li><i class="fas fa-lightbulb"></i> <strong>Caixa:</strong> Mantenha uma reserva de emergência equivalente a 6 meses de custos fixos.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Painel do Contador -->
+        <section id="contador" class="content-section">
+            <header class="section-header">
+                <h2>Painel do Contador</h2>
+                <p>Análise técnica, impostos e conformidade.</p>
+            </header>
+
+            <div class="dre-container">
+                <h3>Demonstrativo do Período (DRE)</h3>
+                <div class="table-responsive">
+                    <table id="dre-table">
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Valor (R$)</th>
+                                <th>% s/ Receita</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bold"><td>Receita Operacional Bruta</td><td>125.400,00</td><td>100%</td></tr>
+                            <tr><td>(-) Deduções e Impostos</td><td>15.048,00</td><td>12%</td></tr>
+                            <tr class="subtotal"><td>Receita Líquida</td><td>110.352,00</td><td>88%</td></tr>
+                            <tr><td>(-) Custos Variáveis (CPV/CSV)</td><td>45.200,00</td><td>36%</td></tr>
+                            <tr class="subtotal"><td>Margem de Contribuição</td><td>65.152,00</td><td>52%</td></tr>
+                            <tr><td>(-) Despesas Fixas</td><td>22.000,00</td><td>17,5%</td></tr>
+                            <tr class="total"><td>Lucro Operacional (EBIT)</td><td>43.152,00</td><td>34,5%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="actions">
+                    <button class="btn-premium" onclick="exportPDF()"><i class="fas fa-file-pdf"></i> Exportar Relatório Consolidado</button>
+                </div>
             </div>
 
-            <!-- MEMÓRIA DE CÁLCULO (colapsável) -->
-            <div class="memoria-section" id="memoriaSection" style="display: none;">
-                <div class="memoria-header">
-                    <h3><i class="fas fa-file-alt" style="margin-right: 8px; opacity: 0.8;"></i>Memória de Cálculo</h3>
-                </div>
-                <div class="memoria-collapsible" id="memoriaCollapsible">
-                    <div class="memoria-collapsible-inner">
-                        <div class="memoria-box" id="memoriaBox"></div>
+            <div class="tax-simulator">
+                <h3>Simulador de Alíquotas</h3>
+                <div class="simulator-grid">
+                    <div class="sim-card">
+                        <h4>Simples Nacional</h4>
+                        <div class="input-group">
+                            <label>RBT12 (Faturamento 12 meses):</label>
+                            <input type="number" id="rbt12" value="1200000" oninput="calcularSimples()">
+                        </div>
+                        <div class="input-group">
+                            <label>Faturamento Mensal:</label>
+                            <input type="number" id="fat-mensal" value="100000" oninput="calcularSimples()">
+                        </div>
+                        <div class="results-box">
+                            <p>Alíquota Efetiva: <span id="aliq-efetiva">10,50%</span></p>
+                            <p>Valor DAS: <span id="valor-das">R$ 10.500,00</span></p>
+                        </div>
+                    </div>
+                    <div class="sim-card">
+                        <h4>Lucro Presumido (Simulado)</h4>
+                        <p class="info-text">Baseado em atividade de Serviços (32% presunção).</p>
+                        <div class="results-box">
+                            <p>IRPJ/CSLL: <span>R$ 4.800,00</span></p>
+                            <p>PIS/COFINS: <span>R$ 3.650,00</span></p>
+                            <p>Total Estimado: <span>R$ 8.450,00</span></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- GRÁFICOS SECTION -->
-        <section id="graficos" class="section">
-            <div class="section-header">
-                <h1>Gráficos</h1>
-                <p>Visualização dos indicadores financeiros</p>
-            </div>
+        <!-- Section: Calculadora -->
+        <section id="calculadora" class="content-section">
+            <header class="section-header">
+                <h2>Calculadora Multifunções</h2>
+                <p>Simulações de cenários complexos.</p>
+            </header>
 
-            <div class="charts-grid">
-                <div class="chart-container">
-                    <h3>Receita Mensal</h3>
-                    <canvas id="chartReceita"></canvas>
+            <div class="calc-grid">
+                <div class="calc-card">
+                    <h4>Margem e Markup</h4>
+                    <div class="input-group">
+                        <label>Custo do Produto/Serviço (R$):</label>
+                        <input type="number" id="calc-custo" value="100" oninput="calcularMargem()">
+                    </div>
+                    <div class="input-group">
+                        <label>Preço de Venda (R$):</label>
+                        <input type="number" id="calc-venda" value="180" oninput="calcularMargem()">
+                    </div>
+                    <div class="results-box">
+                        <p>Markup: <span id="res-markup">1.80</span></p>
+                        <p>Margem de Lucro: <span id="res-margem">44.44%</span></p>
+                    </div>
                 </div>
-                <div class="chart-container">
-                    <h3>Evolução do Lucro</h3>
-                    <canvas id="chartLucro"></canvas>
-                </div>
-                <div class="chart-container">
-                    <h3>Fluxo de Caixa</h3>
-                    <canvas id="chartFluxo"></canvas>
-                </div>
-                <div class="chart-container">
-                    <h3>Receita x Custos</h3>
-                    <canvas id="chartComparativo"></canvas>
-                </div>
-                <div class="chart-container">
-                    <h3>Distribuição Financeira</h3>
-                    <canvas id="chartDistribuicao"></canvas>
-                </div>
-                <div class="chart-container">
-                    <h3>Evolução do Score</h3>
-                    <canvas id="chartScore"></canvas>
+
+                <div class="calc-card">
+                    <h4>Ponto de Equilíbrio (Break-Even)</h4>
+                    <div class="input-group">
+                        <label>Despesas Fixas Totais (R$):</label>
+                        <input type="number" id="be-fixo" value="20000" oninput="calcularBE()">
+                    </div>
+                    <div class="input-group">
+                        <label>Margem de Contribuição (%):</label>
+                        <input type="number" id="be-margem" value="40" oninput="calcularBE()">
+                    </div>
+                    <div class="results-box">
+                        <p>Faturamento Necessário:</p>
+                        <span class="highlight" id="res-be">R$ 50.000,00</span>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- RELATÓRIOS SECTION -->
-        <section id="relatorios" class="section">
-            <div class="section-header">
-                <h1>Relatórios</h1>
-                <p>Gere relatórios profissionais em PDF</p>
-            </div>
+        <!-- Section: Alertas -->
+        <section id="alertas" class="content-section">
+            <header class="section-header">
+                <h2>Alertas de Urgência</h2>
+                <p>Módulos críticos que exigem sua atenção.</p>
+            </header>
 
-            <div class="relatorio-container">
-                <div class="relatorio-card">
-                    <i class="fas fa-file-pdf"></i>
-                    <h3>Relatório Mensal</h3>
-                    <p>Resumo completo com todos os indicadores e gráficos</p>
-                    <button class="btn btn-secondary" id="btnGerarPDF">
-                        <i class="fas fa-download"></i> Gerar PDF
-                    </button>
+            <div class="alerts-container">
+                <div class="alert-card critical pulse">
+                    <div class="alert-icon"><i class="fas fa-exclamation-circle"></i></div>
+                    <div class="alert-content">
+                        <h4>URGENTE: Guia do Simples Nacional</h4>
+                        <p>O vencimento ocorre em menos de 48 horas. Evite multas e juros.</p>
+                    </div>
+                </div>
+                <div class="alert-card warning">
+                    <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="alert-content">
+                        <h4>ALERTA: Margem de Lucro</h4>
+                        <p>Sua margem atual (28%) está abaixo do limite de segurança configurado (30%).</p>
+                    </div>
+                </div>
+                <div class="alert-card info">
+                    <div class="alert-icon"><i class="fas fa-info-circle"></i></div>
+                    <div class="alert-content">
+                        <h4>ATENÇÃO: Score Financeiro</h4>
+                        <p>Houve uma queda de 15 pontos devido ao aumento de custos variáveis no último mês.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- Section: FAQ -->
+        <section id="faq" class="content-section">
+            <header class="section-header">
+                <h2>FAQ / Ajuda</h2>
+                <p>Respostas rápidas para suas dúvidas.</p>
+            </header>
 
-
-        <!-- ALERTAS SECTION -->
-        <section id="alertas" class="section">
-            <div class="section-header">
-                <h1>Alertas</h1>
-                <p>Problemas e recomendações identificados</p>
-            </div>
-
-            <div class="alertas-container" id="alertasContainer">
-                <p class="empty-state">Nenhum alerta no momento. Parabéns!</p>
-            </div>
-        </section>
-
-        <!-- CONFIGURAÇÕES SECTION -->
-        <section id="configuracoes" class="section">
-            <div class="section-header">
-                <h1>Configurações</h1>
-                <p>Personalize seu sistema</p>
-            </div>
-
-            <div class="config-container">
-                <div class="config-group">
-                    <h3>Dados da Empresa</h3>
-                    <div class="config-item">
-                        <label>Nome</label>
-                        <p id="configEmpresa">-</p>
-                    </div>
-                    <div class="config-item">
-                        <label>CNPJ</label>
-                        <p id="configCNPJ">-</p>
-                    </div>
-                    <div class="config-item">
-                        <label>Tipo</label>
-                        <p id="configTipo">-</p>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">Como calcular minha alíquota do Simples Nacional? <i class="fas fa-chevron-down"></i></div>
+                    <div class="accordion-content">
+                        <p>O sistema utiliza a fórmula: <code>(RBT12 * Alíquota Nominal - Parcela a Deduzir) / RBT12</code>. Isso gera a alíquota efetiva que é aplicada sobre o seu faturamento do mês atual.</p>
                     </div>
                 </div>
-
-                <div class="config-group">
-                    <h3>Preferências</h3>
-                    <div class="config-item">
-                        <label>Tema</label>
-                        <select id="selectTema">
-                            <option value="escuro">Escuro (Padrão)</option>
-                            <option value="claro">Claro</option>
-                        </select>
+                <div class="accordion-item">
+                    <div class="accordion-header">Como funciona o score de saúde do Kawr Business? <i class="fas fa-chevron-down"></i></div>
+                    <div class="accordion-content">
+                        <p>Nosso algoritmo analisa quatro pilares: Liquidez (capacidade de pagamento), Rentabilidade (eficiência do lucro), Endividamento (comprometimento do capital) e Alavancagem (uso de recursos de terceiros).</p>
                     </div>
                 </div>
-
-                <div class="config-group">
-                    <h3>Conta</h3>
-                    <button class="btn btn-danger" id="btnLimparDados">
-                        <i class="fas fa-trash"></i> Limpar Todos os Dados
-                    </button>
+                <div class="accordion-item">
+                    <div class="accordion-header">Como exportar meus relatórios fiscais? <i class="fas fa-chevron-down"></i></div>
+                    <div class="accordion-content">
+                        <p>No Painel do Contador, clique no botão "Exportar Relatório Consolidado". O sistema gerará um PDF premium com papel timbrado contendo todos os indicadores essenciais.</p>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-
-
-    <!-- SCRIPTS -->
-    <script src="js/config.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/database.js"></script>
-    <script src="js/score.js"></script>
-    <script src="js/charts.js"></script>
-    <script src="js/alerts.js"></script>
-    <script src="js/relatorios.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
