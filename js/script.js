@@ -53,6 +53,18 @@ document.querySelectorAll(".accordion-header").forEach(header => {
     });
 });
 
+// Global chart instances
+let lineChartInstance = null;
+let barChartInstance = null;
+
+// Global state for calculator values
+let calculatorState = {
+    custo: 100,
+    venda: 180,
+    fixo: 20000,
+    margem: 40
+};
+
 function calcularSimples() {
     const rbt12 = parseFloat(document.getElementById("rbt12").value) || 0;
     const fatMensal = parseFloat(document.getElementById("fat-mensal").value) || 0;
@@ -68,31 +80,91 @@ function calcularSimples() {
     const valorDas = fatMensal * aliqEfetiva;
     document.getElementById("aliq-efetiva").innerText = (aliqEfetiva * 100).toFixed(2) + "%";
     document.getElementById("valor-das").innerText = "R$ " + valorDas.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+    
+    // Update charts after calculation
+    updateChartsFromCalculations();
 }
 
 function calcularMargem() {
     const custo = parseFloat(document.getElementById("calc-custo").value) || 0;
     const venda = parseFloat(document.getElementById("calc-venda").value) || 0;
+    
+    // Update global state
+    calculatorState.custo = custo;
+    calculatorState.venda = venda;
+    
     if (venda > 0) {
         const markup = venda / custo;
         const margem = ((venda - custo) / venda) * 100;
         document.getElementById("res-markup").innerText = markup.toFixed(2);
         document.getElementById("res-margem").innerText = margem.toFixed(2) + "%";
     }
+    
+    // Update charts after calculation
+    updateChartsFromCalculations();
 }
 
 function calcularBE() {
     const fixo = parseFloat(document.getElementById("be-fixo").value) || 0;
     const margemCont = parseFloat(document.getElementById("be-margem").value) || 0;
+    
+    // Update global state
+    calculatorState.fixo = fixo;
+    calculatorState.margem = margemCont;
+    
     if (margemCont > 0) {
         const be = fixo / (margemCont / 100);
         document.getElementById("res-be").innerText = "R$ " + be.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+    }
+    
+    // Update charts after calculation
+    updateChartsFromCalculations();
+}
+
+function updateChartsFromCalculations() {
+    // Calculate new values based on calculator inputs
+    const markup = calculatorState.venda > 0 ? calculatorState.venda / calculatorState.custo : 1;
+    const margemLucro = calculatorState.venda > 0 ? ((calculatorState.venda - calculatorState.custo) / calculatorState.venda) * 100 : 0;
+    const breakEven = calculatorState.margem > 0 ? calculatorState.fixo / (calculatorState.margem / 100) : 0;
+    
+    // Update dashboard cards with new values
+    const receita = 125400 * (1 + (margemLucro / 100) * 0.1); // Simulate impact
+    const custos = 45200 * (1 - (margemLucro / 100) * 0.05);
+    const despesas = 22000;
+    const lucro = receita - custos - despesas;
+    
+    // Update card values
+    document.querySelectorAll(".dashboard-cards .card")[0].querySelector(".card-value").innerText = "R$ " + receita.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+    document.querySelectorAll(".dashboard-cards .card")[1].querySelector(".card-value").innerText = "R$ " + custos.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+    document.querySelectorAll(".dashboard-cards .card")[3].querySelector(".card-value").innerText = "R$ " + lucro.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+    
+    // Update charts
+    updateCharts(receita, custos, lucro);
+}
+
+function updateCharts(receita, custos, lucro) {
+    // Generate new data based on calculations
+    const entradas = [100000, 115000, 108000, 125000, 130000, receita];
+    const saidas = [80000, 85000, 82000, 90000, 88000, custos];
+    const lucroMensal = entradas.map((val, idx) => val - saidas[idx]);
+    
+    // Update line chart
+    if (lineChartInstance) {
+        lineChartInstance.data.datasets[0].data = entradas;
+        lineChartInstance.data.datasets[1].data = saidas;
+        lineChartInstance.update();
+    }
+    
+    // Update bar chart
+    if (barChartInstance) {
+        barChartInstance.data.datasets[0].data = lucroMensal;
+        barChartInstance.update();
     }
 }
 
 function initCharts() {
     const ctxLine = document.getElementById("lineChart").getContext("2d");
-    new Chart(ctxLine, {
+    lineChartInstance = new Chart(ctxLine, {
         type: "line",
         data: {
             labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"],
@@ -118,7 +190,7 @@ function initCharts() {
         }
     });
     const ctxBar = document.getElementById("barChart").getContext("2d");
-    new Chart(ctxBar, {
+    barChartInstance = new Chart(ctxBar, {
         type: "bar",
         data: {
             labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"],
