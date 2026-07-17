@@ -266,15 +266,7 @@ main {
     color: var(--black);
 }
 
-.card.updating {
-    animation: pulse-gold 0.6s ease;
-}
-
-@keyframes pulse-gold {
-    0% { background: var(--white); }
-    50% { background: rgba(197, 168, 80, 0.05); }
-    100% { background: var(--white); }
-}
+/* Animações de atualização removidas para manter discreto */
 
 /* Score Section */
 .score-section {
