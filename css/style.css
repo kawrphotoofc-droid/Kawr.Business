@@ -309,6 +309,10 @@ main {
 .card-trend.up { color: #27ae60; }
 .card-trend.down { color: #e74c3c; }
 
+.card.updating {
+    animation: pulse-update 0.6s ease-in-out;
+}
+
 /* Charts */
 .charts-container {
     display: grid;
@@ -329,6 +333,37 @@ main {
     font-size: 18px;
 }
 
+.chart-box canvas {
+    max-height: 300px;
+}
+
+/* Animação de Atualização */
+@keyframes pulse-update {
+    0% { background-color: var(--white); }
+    50% { background-color: rgba(197, 168, 80, 0.1); }
+    100% { background-color: var(--white); }
+}
+
+.updating {
+    animation: pulse-update 0.6s ease-in-out;
+}
+
+/* Indicador de Atualização em Tempo Real */
+.update-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #27ae60;
+    border-radius: 50%;
+    margin-left: 10px;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0.5; }
+}
+
 /* Score Section */
 .score-section {
     display: grid;
@@ -342,6 +377,20 @@ main {
     padding: 30px;
     border-radius: 15px;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.score-card::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    width: 8px;
+    height: 8px;
+    background-color: #27ae60;
+    border-radius: 50%;
+    animation: blink 1.5s infinite;
 }
 
 .score-display {
@@ -401,6 +450,7 @@ main {
     height: 100%;
     background: var(--gold);
     border-radius: 3px;
+    transition: width 0.5s ease;
 }
 
 .tips-card {
